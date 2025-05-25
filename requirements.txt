@@ -1,0 +1,2 @@
+# Requirements will be added as needed when integrating with real services
+# For now, this is a mock implementation with no external dependencies 
