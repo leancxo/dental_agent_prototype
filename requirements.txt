@@ -1,2 +1,12 @@
 # Requirements will be added as needed when integrating with real services
-# For now, this is a mock implementation with no external dependencies 
+# For now, this is a mock implementation with no external dependencies
+
+# Core dependencies
+openai>=1.0.0  # For GPT integration
+google-generativeai>=0.3.0  # For Gemini integration
+python-dotenv>=1.0.0  # For loading environment variables
+
+# Development dependencies
+pytest>=7.0.0  # For testing
+black>=23.0.0  # For code formatting
+flake8>=6.0.0  # For linting 
