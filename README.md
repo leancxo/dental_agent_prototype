@@ -4,14 +4,13 @@ A sophisticated AI assistant prototype for dental practices, designed to automat
 
 ## Overview
 
-The Dental Agent Prototype is a Python-based system that simulates an AI assistant for dental practices. It's designed with a modular architecture that allows for easy integration with real services in the future. Currently, all external system interactions (LLMs, schedulers, communication channels) are mocked for demonstration purposes.
+The Dental Agent Prototype is a Python-based system that simulates an AI assistant for dental practices. It's designed with a modular architecture that allows for easy integration with real services in the future. Currently, all external system interactions (LLMs, schedulers, communication channels) are mocked for demonstration purposes, but real integrations are now available for Google Calendar, SendGrid email, and Twilio/ElevenLabs voice.
 
 ## Features
 
 - **Appointment Management**
-  - Schedule new appointments
-  - Modify existing appointments
-  - Cancel appointments
+  - Schedule new appointments (Google Calendar integration)
+  - Modify and cancel appointments
   - Handle no-show scenarios
   - Send appointment reminders
 
@@ -20,6 +19,8 @@ The Dental Agent Prototype is a Python-based system that simulates an AI assista
   - Send outbound messages and calls
   - Process patient queries
   - Provide automated responses
+  - **Send real emails (SendGrid) and SMS (Twilio, coming soon)**
+  - **Voice agent: receive phone calls, transcribe with ElevenLabs, and play back responses**
 
 - **Dental Knowledge Base**
   - Answer basic dental queries
@@ -32,35 +33,59 @@ The Dental Agent Prototype is a Python-based system that simulates an AI assista
 dental_agent_prototype/
 ├── src/
 │   ├── agent_core.py         # Main agent logic and orchestration
-│   ├── llm_handler.py        # LLM interaction abstraction
-│   ├── scheduler_handler.py  # Appointment scheduling interface
-│   ├── communication_handler.py  # Communication channels interface
-│   ├── config.py            # Configuration settings
-│   └── main.py              # Entry point and simulation
-├── .gitignore
+│   ├── llm/                  # LLM handler implementations (GPT, Gemini)
+│   ├── scheduler_handler.py  # Appointment scheduling interface (mock + Google Calendar)
+│   ├── communication_handler.py  # Communication channels (mock, SendGrid, Twilio)
+│   ├── google_calendar_handler.py # Google Calendar integration
+│   ├── voice_demo.py         # Twilio + ElevenLabs voice demo (Flask app)
+│   └── ...                   # Other scripts and utilities
+├── .env.example
 ├── requirements.txt
-└── README.md
+├── README.md
 ```
 
-## Components
+## Voice Agent Demo (Twilio + ElevenLabs)
 
-### DentalAgent (agent_core.py)
-The main orchestrator that coordinates between different handlers and implements the core business logic.
+- **Receive a phone call via Twilio**
+- **Record the caller's message**
+- **Transcribe the message with ElevenLabs**
+- **Play back the transcript to the caller**
 
-### LLMHandler (llm_handler.py)
-Interface for all Large Language Model interactions. Currently mocked, but designed to be replaced with real LLM services.
+### Setup
+1. Set up your `.env` with Twilio and ElevenLabs credentials (see `.env.example`).
+2. Run the Flask app:
+   ```bash
+   python3 src/voice_demo.py
+   ```
+3. Start ngrok:
+   ```bash
+   ngrok http 5000
+   ```
+4. Set your Twilio phone number's webhook to `https://xxxx.ngrok.io/voice`.
+5. Call your Twilio number and test the flow!
 
-### SchedulerHandler (scheduler_handler.py)
-Manages appointment scheduling operations. Currently uses in-memory storage, ready to be connected to real scheduling systems.
+## Google Calendar Integration
+- Real appointment booking, modification, and cancellation using Google Calendar API.
+- See your appointments in your Google Calendar in real time.
 
-### CommunicationHandler (communication_handler.py)
-Handles all communication channels (SMS, voice calls). Currently mocked, prepared for integration with services like Twilio.
+## Real Email Integration (SendGrid)
+- Send real follow-up emails for no-shows or reminders.
+- Configure your SendGrid API key and sender in `.env`.
+
+## Roadmap: Conversational Voice Agent
+- [ ] Multi-turn conversation: keep the call open, transcribe each utterance, and respond dynamically.
+- [ ] Integrate LLM (OpenAI/Gemini) for intent detection and response generation.
+- [ ] Use ElevenLabs TTS for natural voice responses.
+- [ ] Full phone-based appointment management.
 
 ## Getting Started
 
 ### Prerequisites
 - Python 3.x
 - Git
+- Twilio account and phone number
+- SendGrid account
+- ElevenLabs account (for voice recognition)
 
 ### Installation
 
@@ -81,36 +106,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Running the Prototype
-
-To run the simulation:
-```bash
-cd src
-python main.py
-```
-
-This will execute a demonstration of the agent's capabilities, including:
-- Appointment scheduling
-- Dental query handling
-- No-show scenario management
-
-## Development
-
-The prototype is designed to be easily extended. To add real service integrations:
-
-1. Replace the mock implementations in the handler classes
-2. Add necessary API keys to `config.py`
-3. Update `requirements.txt` with new dependencies
-
-## Future Enhancements
-
-- Integration with real LLM services (e.g., GPT-4, Claude)
-- Connection to actual dental practice management systems
-- Implementation of real communication channels (SMS, voice)
-- Enhanced natural language understanding
-- Advanced appointment optimization
-- Patient history integration
-- Analytics and reporting features
+4. Copy `.env.example` to `.env` and fill in your credentials.
 
 ## Contributing
 
